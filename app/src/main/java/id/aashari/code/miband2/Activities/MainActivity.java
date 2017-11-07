@@ -125,13 +125,23 @@ public class MainActivity extends Activity {
     }
 
     void stateConnected() {
+        Log.d("status", "stateConnected");
         bluetoothGatt.discoverServices();
-        txtState.setText("Connected");
+        writeText(txtState, "Connected");
     }
 
     void stateDisconnected() {
+        Log.d("status", "stateDisconnected");
         bluetoothGatt.disconnect();
-        txtState.setText("Disconnected");
+        writeText(txtState, "Disconnected");
+    }
+
+    void writeText(final TextView tv, final String text) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                tv.setText(text);
+            }
+        });
     }
 
     void startScanHeartRate() {
@@ -207,7 +217,7 @@ public class MainActivity extends Activity {
             super.onCharacteristicRead(gatt, characteristic, status);
             Log.v("test", "onCharacteristicRead");
             byte[] data = characteristic.getValue();
-            txtByte.setText(Arrays.toString(data));
+            writeText(txtByte, Arrays.toString(data));
         }
 
         @Override
@@ -221,7 +231,7 @@ public class MainActivity extends Activity {
             super.onCharacteristicChanged(gatt, characteristic);
             Log.v("test", "onCharacteristicChanged");
             byte[] data = characteristic.getValue();
-            txtByte.setText(Arrays.toString(data));
+            writeText(txtByte, Arrays.toString(data));
         }
 
         @Override
